@@ -1,6 +1,14 @@
 # core/settings.py
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
+# სად გადამისამართდეს მომხმარებელი ლოგინის შემდეგ
+LOGIN_REDIRECT_URL = reverse_lazy('snippet-list')
+
+# სურვილისამებრ, ლოგაუთის შემდეგ
+LOGOUT_REDIRECT_URL = reverse_lazy('snippet-list')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

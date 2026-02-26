@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .models import Snippet
-from .permissions import IsOnerOrReadOnly, IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly
 from .serializers import SnippetSerializer, UserSerializer
 
 class SnippetHighlight(generics.GenericAPIView):
