@@ -9,6 +9,7 @@ from .models import Snippet
 from .permissions import IsOwnerOrReadOnly
 from .serializers import SnippetSerializer, UserSerializer
 
+
 class SnippetHighlight(generics.GenericAPIView):
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
@@ -16,7 +17,7 @@ class SnippetHighlight(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         snippet = self.get_object()
         return Response(snippet.highlighted)
-    
+
 
 @api_view(["GET"])
 def api_root(request, format=None):
@@ -26,6 +27,7 @@ def api_root(request, format=None):
             "snippets": reverse("snippet-list", request=request, format=format),
         }
     )
+
 
 class SnippetList(generics.ListCreateAPIView):
     serializer_class = SnippetSerializer
@@ -41,6 +43,7 @@ class SnippetList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
@@ -50,6 +53,7 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     )
 
     def retrieve(self, request, *args, **kwargs):
+        # ავტომატურად ზრდის views ველს
         instance = self.get_object()
         instance.views += 1
         instance.save(update_fields=['views'])
@@ -59,6 +63,7 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
