@@ -28,9 +28,15 @@ def api_root(request, format=None):
     )
 
 class SnippetList(generics.ListCreateAPIView):
-    queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+        queryset = Snippet.objects.filter(is_public=True)
+        tags = self.request.query_params.get('tags')
+        if tags:
+            queryset = queryset.filter(tags__icontains=tags)
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -39,9 +45,16 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly, 
+        permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
     )
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.views += 1
+        instance.save(update_fields=['views'])
+        return super().retrieve(request, *args, **kwargs)
+
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
@@ -50,4 +63,3 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
