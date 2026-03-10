@@ -5,9 +5,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),  # DRF Browsable API login
+
+    # DRF Browsable API login
+    path('api-auth/', include('rest_framework.urls')),
+
+    # JWT token endpoints
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('', include('snippets.urls')),  # snippets app URLs
+    # Snippets app URLs
+    path("", include('snippets.urls')),
 ]

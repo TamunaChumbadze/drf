@@ -13,12 +13,12 @@ urlpatterns = [
     path("snippets/<int:pk>/highlight/", views.SnippetHighlight.as_view(), name="snippet-highlight"),
 
     # Comments (nested under snippet)
-    path("snippets/<int:snippet_pk>/comments/", views.CommentList.as_view(), name="comment-list"),
+    path("snippets/<int:snippet_pk>/comments/", views.CommentListCreate.as_view(), name="comment-list-create"),
     path("snippets/<int:snippet_pk>/comments/<int:pk>/", views.CommentDetail.as_view(), name="comment-detail"),
 
     # Likes (nested under snippet)
     path("snippets/<int:snippet_pk>/likes/", views.LikeList.as_view(), name="like-list"),
-    path("snippets/<int:snippet_pk>/likes/<int:pk>/", views.LikeDetail.as_view(), name="like-detail"),
+    path("snippets/<int:snippet_pk>/like/", views.ToggleLike.as_view(), name="toggle-like"),
 
     # Users
     path("users/", views.UserList.as_view(), name="user-list"),
