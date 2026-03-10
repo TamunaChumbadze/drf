@@ -1,7 +1,7 @@
 # snippets/serializers.py
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Snippet
+from .models import Snippet, Comment, Like
 
 
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,6 +28,36 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
             "is_public",
             "views",
             "tags",
+        )
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = Comment
+        fields = (
+            "url",
+            "id",
+            "snippet",
+            "owner",
+            "content",
+            "created",
+            "updated",
+        )
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Like
+        fields = (
+            "url",
+            "id",
+            "snippet",
+            "user",
+            "created",
         )
 
 
