@@ -7,15 +7,23 @@ from rest_framework.reverse import reverse
 
 from .models import Snippet, Comment, Like
 from .permissions import IsOwnerOrReadOnly
-from .serializers import SnippetSerializer, UserSerializer, RegisterSerializer, CommentSerializer, LikeSerializer
+from .serializers import (
+    SnippetSerializer,
+    UserSerializer,
+    RegisterSerializer,
+    CommentSerializer,
+    LikeSerializer,
+)
 
 
+# ---------------- Registration ----------------
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = (permissions.AllowAny,)
 
 
+# ---------------- Snippets ----------------
 class SnippetHighlight(generics.GenericAPIView):
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
@@ -31,8 +39,6 @@ def api_root(request, format=None):
         {
             "users": reverse("user-list", request=request, format=format),
             "snippets": reverse("snippet-list", request=request, format=format),
-            "comments": reverse("comment-list", request=request, format=format),
-            "likes": reverse("like-list", request=request, format=format),
         }
     )
 
@@ -68,7 +74,7 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 # ---------------- Comments ----------------
-class CommentList(generics.ListCreateAPIView):
+class CommentListCreate(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -88,7 +94,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 # ---------------- Likes ----------------
-class LikeList(generics.ListCreateAPIView):
+class LikeList(generics.ListAPIView):
     serializer_class = LikeSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -96,15 +102,18 @@ class LikeList(generics.ListCreateAPIView):
         snippet_id = self.kwargs.get("snippet_pk")
         return Like.objects.filter(snippet_id=snippet_id)
 
-    def perform_create(self, serializer):
-        snippet_id = self.kwargs.get("snippet_pk")
-        serializer.save(user=self.request.user, snippet_id=snippet_id)
 
-
-class LikeDetail(generics.RetrieveDestroyAPIView):
-    queryset = Like.objects.all()
+class ToggleLike(generics.GenericAPIView):
     serializer_class = LikeSerializer
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, snippet_pk):
+        snippet = Snippet.objects.get(pk=snippet_pk)
+        like, created = Like.objects.get_or_create(user=request.user, snippet=snippet)
+        if not created:
+            like.delete()
+            return Response({"status": "unliked"})
+        return Response({"status": "liked"})
 
 
 # ---------------- Users ----------------

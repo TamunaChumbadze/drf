@@ -1,9 +1,9 @@
-# snippets/serializers.py
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Snippet, Comment, Like
 
 
+# ---------------- Snippets ----------------
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source="owner.username")
     highlight = serializers.HyperlinkedIdentityField(
@@ -31,6 +31,7 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+# ---------------- Comments ----------------
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
 
@@ -43,10 +44,10 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             "owner",
             "content",
             "created",
-            "updated",
         )
 
 
+# ---------------- Likes ----------------
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
 
@@ -61,6 +62,7 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+# ---------------- Users ----------------
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.HyperlinkedRelatedField(
         many=True,
@@ -78,6 +80,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+# ---------------- Registration ----------------
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
