@@ -7,7 +7,13 @@ from rest_framework.reverse import reverse
 
 from .models import Snippet
 from .permissions import IsOwnerOrReadOnly
-from .serializers import SnippetSerializer, UserSerializer
+from .serializers import SnippetSerializer, UserSerializer, RegisterSerializer
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class SnippetHighlight(generics.GenericAPIView):
@@ -35,7 +41,7 @@ class SnippetList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Snippet.objects.filter(is_public=True)
-        tags = self.request.query_params.get('tags')
+        tags = self.request.query_params.get("tags")
         if tags:
             queryset = queryset.filter(tags__icontains=tags)
         return queryset
@@ -53,10 +59,9 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     )
 
     def retrieve(self, request, *args, **kwargs):
-        # ავტომატურად ზრდის views ველს
         instance = self.get_object()
         instance.views += 1
-        instance.save(update_fields=['views'])
+        instance.save(update_fields=["views"])
         return super().retrieve(request, *args, **kwargs)
 
 

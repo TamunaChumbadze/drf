@@ -33,7 +33,9 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.HyperlinkedRelatedField(
-        many=True, view_name="snippet-detail", read_only=True
+        many=True,
+        view_name="snippet-detail",
+        read_only=True
     )
 
     class Meta:
@@ -44,3 +46,25 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "username",
             "snippets",
         )
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "email",
+            "password",
+        )
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
+
+    def create(self, validated_data):
+        user = User(
+            username=validated_data["username"],
+            email=validated_data["email"]
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
