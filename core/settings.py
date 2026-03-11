@@ -18,7 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = []
 # თუ ფრონთს პროდაქშენში გავუშვებთ აქ აუცილებლად უნდა დავამატოთ მისი ჰოსტნეიმი, რომ აპიმ მასთან კომუნიკაცია შეძლოს
@@ -121,7 +122,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "staticfiles"]  # Dev-ში სტატიკ ფაილები აქედან აიღება
 
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
