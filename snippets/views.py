@@ -59,12 +59,17 @@ class SnippetList(generics.ListCreateAPIView):
 
 
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
     )
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return Snippet.objects.filter(Q(is_public=True) | Q(owner=user))
+        return Snippet.objects.filter(is_public=True)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

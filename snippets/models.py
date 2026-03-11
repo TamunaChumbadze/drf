@@ -80,6 +80,8 @@ class Like(models.Model):
         Snippet, related_name="likes", on_delete=models.CASCADE
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('snippet', 'user')  # თითოეული user შეუძლია მხოლოდ ერთხელ like
