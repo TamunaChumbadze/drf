@@ -8,6 +8,9 @@ urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
 
+    # Django auth (login/logout)
+    path('accounts/', include('django.contrib.auth.urls')),
+
     # DRF browsable API login
     path('api-auth/', include('rest_framework.urls')),
 

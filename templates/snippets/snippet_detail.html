@@ -1,23 +1,19 @@
+<!-- templates/snippets/snippet_detail.html -->
 {% extends "base.html" %}
 
 {% block title %}{{ snippet.title }}{% endblock %}
 
 {% block content %}
 <h2>{{ snippet.title }}</h2>
-<p>By {{ snippet.owner.username }} | Views: {{ snippet.views }}</p>
+<p>By: {{ snippet.owner.username }}</p>
+<p>{{ snippet.description }}</p>
 
-<div>
+<div class="snippet-code">
     {{ snippet.highlighted|safe }}
 </div>
 
-<p>Tags: {{ snippet.tags }}</p>
-
-<h3>Comments</h3>
-<ul>
-    {% for comment in snippet.comments.all %}
-        <li>{{ comment.owner.username }}: {{ comment.content }}</li>
-    {% empty %}
-        <li>No comments yet.</li>
-    {% endfor %}
-</ul>
+<p>Language: {{ snippet.language }} | Style: {{ snippet.style }}</p>
+<p>Views: {{ snippet.views }}</p>
+{% if not snippet.is_public %}<p>(Private)</p>{% endif %}
+<a href="{% url 'snippet-list-web' %}" class="btn">Back to Snippets</a>
 {% endblock %}

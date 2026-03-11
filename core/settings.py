@@ -12,8 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
+# DEBUG=True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -89,7 +90,7 @@ if DEBUG:
     # Dev: გამოიყენე ფოლდერი static როგორც source
     STATICFILES_DIRS = [BASE_DIR / "static"]
 else:
-    # Prod: collectstatic output
+    # Prod: აქ უნდა ვთქვათ, სად ჩაჯდება collectstatic–ის შედეგი
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -97,6 +98,9 @@ else:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # REST Framework
 REST_FRAMEWORK = {
