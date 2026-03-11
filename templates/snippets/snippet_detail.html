@@ -4,16 +4,25 @@
 {% block title %}{{ snippet.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ snippet.title }}</h2>
-<p>By: {{ snippet.owner.username }}</p>
-<p>{{ snippet.description }}</p>
+<div class="snippet-detail-card">
+    <h2>{{ snippet.title }}</h2>
+    <p class="snippet-meta">
+        By {{ snippet.owner.username }}
+        {% if not snippet.is_public %}(Private){% endif %}
+    </p>
 
-<div class="snippet-code">
-    {{ snippet.highlighted|safe }}
+    <p>{{ snippet.description }}</p>
+
+    <div class="snippet-code">
+        {{ snippet.highlighted|safe }}
+    </div>
+
+    <div class="snippet-footer">
+        <span>Language: {{ snippet.language }}</span>
+        <span>Views: {{ snippet.views }}</span>
+        <span>Style: {{ snippet.style }}</span>
+    </div>
+
+    <a href="{% url 'snippet-list-web' %}" class="btn">Back to Snippets</a>
 </div>
-
-<p>Language: {{ snippet.language }} | Style: {{ snippet.style }}</p>
-<p>Views: {{ snippet.views }}</p>
-{% if not snippet.is_public %}<p>(Private)</p>{% endif %}
-<a href="{% url 'snippet-list-web' %}" class="btn">Back to Snippets</a>
 {% endblock %}

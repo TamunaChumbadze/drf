@@ -1,4 +1,4 @@
-<!-- templates/snippets/snippet_list.html -->
+<!-- snippet_list.html -->
 {% extends "base.html" %}
 
 {% block title %}All Snippets{% endblock %}
@@ -6,17 +6,32 @@
 {% block content %}
 <h2>All Snippets</h2>
 
-<ul>
+<div class="snippet-grid">
     {% for snippet in snippets %}
-        <li>
-            <a href="{% url 'snippet-detail-web' snippet.pk %}">{{ snippet.title }}</a>
-            by {{ snippet.owner.username }}
-            {% if not snippet.is_public %} (Private) {% endif %}
-        </li>
+        <div class="snippet-card">
+            <h3>
+                <a href="{% url 'snippet-detail-web' snippet.pk %}">
+                    {{ snippet.title }}
+                </a>
+            </h3>
+
+            <p class="snippet-meta">
+                by {{ snippet.owner.username }}
+                {% if not snippet.is_public %}(Private){% endif %}
+            </p>
+
+            <p>{{ snippet.description|truncatechars:120 }}</p>
+
+            <div class="snippet-footer">
+                <span>{{ snippet.language }}</span>
+                <span>{{ snippet.views }} views</span>
+            </div>
+        </div>
     {% empty %}
-        <li>No snippets available.</li>
+        <p>No snippets available.</p>
     {% endfor %}
-</ul>
+</div>
 
 <a href="{% url 'home' %}" class="btn">Back to Home</a>
+
 {% endblock %}

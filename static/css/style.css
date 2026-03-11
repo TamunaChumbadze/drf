@@ -6,22 +6,39 @@
     color: #333;
 }
 
+/* NAVBAR */
 .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #333;
     color: white;
     padding: 10px 20px;
 }
 
-.navbar a {
+.nav-left a,
+.nav-right a {
     color: white;
     margin-right: 15px;
     text-decoration: none;
 }
 
-.navbar a:hover {
+.nav-left a:hover,
+.nav-right a:hover {
     text-decoration: underline;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-right span {
+    color: #ddd;
+}
+
+/* MAIN CONTENT */
 main {
     padding: 20px 0;
 }
@@ -30,24 +47,28 @@ h1, h2 {
     color: #444;
 }
 
+/* LIST */
 ul {
     list-style-type: none;
     padding-left: 0;
 }
 
 ul li {
-    padding: 5px 0;
+    padding: 6px 0;
 }
 
+/* SNIPPET CODE BLOCK */
 .snippet-code {
     background-color: #f4f4f4;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
     overflow-x: auto;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-family: monospace;
 }
 
+/* BUTTONS */
 .btn {
     display: inline-block;
     padding: 6px 12px;
@@ -56,8 +77,55 @@ ul li {
     color: white;
     text-decoration: none;
     border-radius: 4px;
+    transition: background 0.2s;
 }
 
 .btn:hover {
     background-color: #0056b3;
+}
+
+.snippet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.snippet-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.snippet-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.snippet-card h3 {
+    margin-top: 0;
+}
+
+.snippet-card a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.snippet-card a:hover {
+    text-decoration: underline;
+}
+
+.snippet-meta {
+    font-size: 14px;
+    color: #777;
+}
+
+.snippet-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
 }
