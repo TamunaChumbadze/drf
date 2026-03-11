@@ -10,7 +10,7 @@
         <li>
             <a href="{% url 'snippet-detail-web' snippet.pk %}">{{ snippet.title }}</a>
             by {{ snippet.owner.username }}
-            {% if snippet.is_public == False %} (Private) {% endif %}
+            {% if not snippet.is_public %} (Private) {% endif %}
         </li>
     {% empty %}
         <li>No snippets available.</li>

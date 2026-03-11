@@ -23,7 +23,7 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-# ---------------- Web Templates ----------------
+# Snippets Web
 class SnippetListView(ListView):
     model = Snippet
     template_name = "snippets/snippet_list.html"
