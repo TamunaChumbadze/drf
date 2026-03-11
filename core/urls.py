@@ -1,4 +1,5 @@
 # core/urls.py
+# core/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -8,7 +9,7 @@ urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
 
-    # Django auth (login/logout)
+    # Django auth (login/logout, password reset, etc.)
     path('accounts/', include('django.contrib.auth.urls')),
 
     # DRF browsable API login
