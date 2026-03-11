@@ -40,7 +40,7 @@ def api_root(request, format=None):
             "users": reverse("user-list", request=request, format=format),
             "snippets": reverse("snippet-list", request=request, format=format),
             "comments": reverse("comment-list-create", request=request, format=format),
-            "comments": reverse("comment-list-create", request=request, format=format),
+            "likes": reverse("like-list", request=request, format=format),
         }
     )
 
