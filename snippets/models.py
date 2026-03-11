@@ -5,6 +5,7 @@ from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import get_all_lexers, get_lexer_by_name
 from pygments.styles import get_all_styles
+from django.utils import timezone
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -81,7 +82,7 @@ class Like(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         unique_together = ('snippet', 'user')  # თითოეული user შეუძლია მხოლოდ ერთხელ like

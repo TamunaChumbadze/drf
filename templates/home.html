@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Snippets App</h1>
+<p>Explore code snippets created by users or create your own!</p>
+<a href="{% url 'snippet-list-web' %}">View Snippets</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Snippets{% endblock %}
+
+{% block content %}
+<h2>All Snippets</h2>
+
+<ul>
+    {% for snippet in snippets %}
+        <li>
+            <a href="{% url 'snippet-detail-web' snippet.pk %}">{{ snippet.title }}</a>
+            by {{ snippet.owner.username }}
+            {% if snippet.is_public == False %} (Private) {% endif %}
+        </li>
+    {% empty %}
+        <li>No snippets available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

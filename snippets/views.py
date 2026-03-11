@@ -4,6 +4,8 @@ from rest_framework import generics, permissions, renderers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.views.generic import TemplateView, ListView, DetailView
+from django.db.models import Q
 
 from .models import Snippet, Comment, Like
 from .permissions import IsOwnerOrReadOnly
@@ -16,6 +18,30 @@ from .serializers import (
 )
 
 
+# ---------------- Home ----------------
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+
+# ---------------- Web Templates ----------------
+class SnippetListView(ListView):
+    model = Snippet
+    template_name = "snippets/snippet_list.html"
+    context_object_name = "snippets"
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return Snippet.objects.filter(Q(is_public=True) | Q(owner=user))
+        return Snippet.objects.filter(is_public=True)
+
+
+class SnippetDetailView(DetailView):
+    model = Snippet
+    template_name = "snippets/snippet_detail.html"
+    context_object_name = "snippet"
+
+
 # ---------------- Registration ----------------
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -23,7 +49,7 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
 
 
-# ---------------- Snippets ----------------
+# ---------------- Snippets (API) ----------------
 class SnippetHighlight(generics.GenericAPIView):
     queryset = Snippet.objects.all()
     renderer_classes = (renderers.StaticHTMLRenderer,)
