@@ -3,10 +3,15 @@
 
 {% block title %}Home{% endblock %}
 
+<!-- templates/home.html -->
 {% block content %}
-<h1>Welcome to the Snippets App</h1>
-<h3>This is Code Snippet API (mini GitHub Gist)</h3>
-<p>Explore code snippets created by users or create your own!</p>
-<a href="{% url 'snippet-list-web' %}" class="btn">View Snippets</a>
-<a href="{% url 'register' %}" class="btn btn-primary">Create Account</a>
+<div class="welcome-card">
+    <h1>Welcome to the Snippets App</h1>
+    <h3>This is Code Snippet API (mini GitHub Gist)</h3>
+    <p>Explore code snippets created by users or create your own!</p>
+    <div class="welcome-buttons">
+        <a href="{% url 'snippet-list-web' %}" class="btn">View Snippets</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Create Account</a>
+    </div>
+</div>
 {% endblock %}

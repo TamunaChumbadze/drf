@@ -6,6 +6,7 @@
 {% block content %}
 <div class="snippet-detail-card">
     <h2>{{ snippet.title }}</h2>
+
     <p class="snippet-meta">
         By {{ snippet.owner.username }}
         {% if not snippet.is_public %}(Private){% endif %}
@@ -21,7 +22,50 @@
         <span>Language: {{ snippet.language }}</span>
         <span>Views: {{ snippet.views }}</span>
         <span>Style: {{ snippet.style }}</span>
+
+        {% if snippet.owner == request.user %}
+            <a href="{% url 'snippet-edit-web' snippet.pk %}" class="btn">Edit</a>
+            <a href="{% url 'snippet-delete-web' snippet.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
     </div>
+
+<!-- ---------------- Like & Comment Section ---------------- -->
+{% if request.user.is_authenticated %}
+<div class="snippet-actions">
+
+    <!-- Like Form -->
+    <form method="post" action="{% url 'toggle-like' snippet.pk %}">
+        {% csrf_token %}
+        {% if user_liked %}
+            <button type="submit" class="btn btn-like">Unlike ({{ snippet.likes.count }})</button>
+        {% else %}
+            <button type="submit" class="btn btn-like">Like ({{ snippet.likes.count }})</button>
+        {% endif %}
+    </form>
+
+    <!-- Comments List -->
+    <div class="snippet-comments">
+        <h4>Comments ({{ snippet.comments.count }})</h4>
+        {% for comment in snippet.comments.all %}
+            <p><strong>{{ comment.owner.username }}:</strong> {{ comment.content }}</p>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Add Comment Form -->
+    <form method="post" action="{% url 'comment-list-create' snippet.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="snippet" value="{{ snippet.id }}">
+        <textarea name="content" placeholder="Add a comment..." required></textarea>
+        <button type="submit" class="btn btn-comment">Post Comment</button>
+    </form>
+
+</div>
+{% else %}
+    <p><a href="{% url 'login' %}">Login</a> to like or comment.</p>
+{% endif %}
+    <!-- --------------------------------------------------------- -->
 
     <a href="{% url 'snippet-list-web' %}" class="btn">Back to Snippets</a>
 </div>

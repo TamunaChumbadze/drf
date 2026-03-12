@@ -2,7 +2,7 @@
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0 20px;
-    background-color: #f9f9f9;
+    background-color: #f7f0f0;
     color: #333;
 }
 
@@ -40,6 +40,9 @@
 
 /* MAIN CONTENT */
 main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px 0;
 }
 
@@ -92,17 +95,21 @@ ul li {
 }
 
 .snippet-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background: #f0f0f5; /* მსუბუქი ნაცრისფერი */
+    border: 1px solid #ccc;
+    border-radius: 10px;
     padding: 16px;
-    transition: box-shadow 0.2s, transform 0.15s;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+
 }
 
 .snippet-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
 }
+
 
 .snippet-card h3 {
     margin-top: 0;
@@ -110,22 +117,87 @@ ul li {
 
 .snippet-card a {
     text-decoration: none;
-    color: #007bff;
+    color: #020f1d;
 }
 
 .snippet-card a:hover {
-    text-decoration: underline;
+    
+    color: #007bff;
 }
 
 .snippet-meta {
     font-size: 14px;
-    color: #777;
+    color: #555;
+    margin-bottom: 6px;
 }
 
-.snippet-footer {
+.snippet-footer a.btn {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 13px;
+    margin-left: 5px;
+    background-color: #28a745; /* ან სხვა ფერი */
+    color: white;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.snippet-footer a.btn-danger {
+    background-color: #dc3545;
+}
+
+.snippet-footer a.btn:hover {
+    background-color: #1e7e34; /* შეცვალე თქვენი ფერის მიხედვით */
+    text-decoration: none;
+}
+
+.snippet-detail-card h2 {
+    color: #2c3e50;
+    font-weight: 700;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 4px;
+}
+
+.pagination {
+    text-align: center;
+    margin: 25px 0;
+    font-size: 14px;
+}
+
+.pagination a, 
+.pagination span {
+    display: inline-block;
+    margin: 0 4px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: #007bff;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination .current {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+}
+
+.pagination .disabled {
+    color: #999;
+    border-color: #ddd;
+    cursor: default;
+}
+
+
+.bottom-buttons {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
-    color: #666;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 20px;
 }
+

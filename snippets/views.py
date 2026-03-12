@@ -7,6 +7,15 @@ from rest_framework.reverse import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .forms import SnippetForm
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
+
 from .models import Snippet, Comment, Like
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
@@ -16,6 +25,38 @@ from .serializers import (
     CommentSerializer,
     LikeSerializer,
 )
+
+# Create snippet
+class SnippetCreateView(LoginRequiredMixin, CreateView):
+    model = Snippet
+    form_class = SnippetForm
+    template_name = "snippets/snippet_form.html"
+    success_url = reverse_lazy("snippet-list-web")
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+# Update snippet
+class SnippetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Snippet
+    form_class = SnippetForm
+    template_name = "snippets/snippet_form.html"
+    success_url = reverse_lazy("snippet-list-web")
+
+    def test_func(self):
+        snippet = self.get_object()
+        return snippet.owner == self.request.user
+
+# Delete snippet
+class SnippetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Snippet
+    template_name = "snippets/snippet_confirm_delete.html"
+    success_url = reverse_lazy("snippet-list-web")
+
+    def test_func(self):
+        snippet = self.get_object()
+        return snippet.owner == self.request.user
 
 
 # ---------------- Home ----------------
@@ -28,6 +69,7 @@ class SnippetListView(ListView):
     model = Snippet
     template_name = "snippets/snippet_list.html"
     context_object_name = "snippets"
+    paginate_by = 8  # <--- თითო გვერდზე 8 ჩანაწერი
 
     def get_queryset(self):
         user = self.request.user
@@ -35,12 +77,27 @@ class SnippetListView(ListView):
             return Snippet.objects.filter(Q(is_public=True) | Q(owner=user))
         return Snippet.objects.filter(is_public=True)
 
-
+    
+# snippets/views.py
 class SnippetDetailView(DetailView):
     model = Snippet
     template_name = "snippets/snippet_detail.html"
     context_object_name = "snippet"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        snippet = self.object
+        # ყველა Like და Comment prefetch-ით
+        context['likes'] = snippet.likes.all()
+        context['comments'] = snippet.comments.all()
+        # თუ current user already liked
+        if self.request.user.is_authenticated:
+            context['user_liked'] = snippet.likes.filter(user=self.request.user).exists()
+        else:
+            context['user_liked'] = False
+        # Like count
+        context['likes_count'] = snippet.likes.count()
+        return context
 
 # ---------------- Registration ----------------
 class RegisterView(generics.CreateAPIView):

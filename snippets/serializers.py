@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+
+from snippets.permissions import IsOwnerOrReadOnly
 from .models import Snippet, Comment, Like
 
 
@@ -32,13 +34,14 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 
 
 # ---------------- Comments ----------------
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+
 
     class Meta:
         model = Comment
         fields = (
-            "url",
+            
             "id",
             "snippet",
             "owner",

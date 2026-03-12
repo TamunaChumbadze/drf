@@ -25,6 +25,11 @@
             <div class="snippet-footer">
                 <span>{{ snippet.language }}</span>
                 <span>{{ snippet.views }} views</span>
+
+                {% if snippet.owner == request.user %}
+                    <a href="{% url 'snippet-edit-web' snippet.pk %}" class="btn">Edit</a>
+                    <a href="{% url 'snippet-delete-web' snippet.pk %}" class="btn btn-danger">Delete</a>
+                {% endif %}
             </div>
         </div>
     {% empty %}
@@ -32,6 +37,33 @@
     {% endfor %}
 </div>
 
-<a href="{% url 'home' %}" class="btn">Back to Home</a>
+<div class="bottom-buttons">
+    <a href="{% url 'snippet-add-web' %}" class="btn btn-primary">Add Snippet</a>
+    <a href="{% url 'home' %}" class="btn">Back to Home</a>
+</div>
 
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% else %}
+        <span class="disabled">&laquo; First</span>
+        <span class="disabled">Previous</span>
+    {% endif %}
+
+    <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% else %}
+        <span class="disabled">Next</span>
+        <span class="disabled">Last &raquo;</span>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}

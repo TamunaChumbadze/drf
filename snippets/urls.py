@@ -28,6 +28,11 @@ urlpatterns = [
     path("api/users/", views.UserList.as_view(), name="user-list"),
     path("api/users/<int:pk>/", views.UserDetail.as_view(), name="user-detail"),
 
+    # CRUD Web views
+    path("add/", views.SnippetCreateView.as_view(), name="snippet-add-web"),
+    path("<int:pk>/edit/", views.SnippetUpdateView.as_view(), name="snippet-edit-web"),
+    path("<int:pk>/delete/", views.SnippetDeleteView.as_view(), name="snippet-delete-web"),
+
     # API root
     path("api/", views.api_root),
 ]
